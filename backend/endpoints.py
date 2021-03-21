@@ -62,7 +62,15 @@ def symbol_search_analytical(symbol):
         keywords=symbol,
         exact_match=symbol,
     )
-    col_names = [elem.keys() for elem in processed_data][0]
+    if not processed_data:
+        error = {
+            "message": f"Unable to find a matching symbol. "
+                       f"Maybe you need to "
+                       f"<a href='{url_for('api.symbol_search')}'>"
+                       f"try searching again a symbol</a>"
+        }
+        return render_template("symbol_search_analytical.html", error=error)
+    col_names = [list(elem.keys()) for elem in processed_data][0]
     columns = camel_case_to_title_case(col_names)
 
     return render_template(

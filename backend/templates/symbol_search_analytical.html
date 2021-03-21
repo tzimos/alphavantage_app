@@ -6,14 +6,19 @@
       href="{{ url_for('static', filename='css/symbol_search_analytical.css') }}">
 {% endblock %}
 {% block extra_nav_item %}
-                <li class="nav-item">
-                <a class="nav-link"
-                   href="#">Fuck api-key
-                    <span class="sr-only">(current)</span></a>
-            </li>
-            {% endblock %}
+<li class="nav-item">
+    <a class="nav-link"
+       href="{{ url_for('api.symbol_search') }}">Search Symbol
+        <span class="sr-only">(current)</span></a>
+</li>
+{% endblock %}
 {% block content %}
 
+{% if error is defined %}
+<div class="error-message">
+    {{error.message|safe}}
+    </div>
+{% else %}
 <h1 class="core-details">Core Details</h1>
 <table class="table" xmlns="http://www.w3.org/1999/html">
     <thead>
@@ -33,6 +38,7 @@
     </tr>
     </tbody>
 </table>
+{% endif %}
 {% endblock %}
 {% block extra_js %}
 <script src="static/js/symbol_search_analytical.js"></script>
