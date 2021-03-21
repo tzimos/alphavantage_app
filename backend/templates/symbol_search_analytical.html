@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Symbol search analytical{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='css/symbol_search_analytical.css') }}">
+{% endblock %}
+{% block extra_nav_item %}
+                <li class="nav-item">
+                <a class="nav-link"
+                   href="#">Fuck api-key
+                    <span class="sr-only">(current)</span></a>
+            </li>
+            {% endblock %}
+{% block content %}
+
+<h1 class="core-details">Core Details</h1>
+<table class="table" xmlns="http://www.w3.org/1999/html">
+    <thead>
+    <tr>
+        {% for col in columns %}
+        <th>{{ col }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {% for elem in data %}
+        {% for value in elem.values() %}
+        <td>{{value}}</td>
+        {% endfor %}
+        {% endfor %}
+    </tr>
+    </tbody>
+</table>
+{% endblock %}
+{% block extra_js %}
+<script src="static/js/symbol_search_analytical.js"></script>
+{% endblock %}

@@ -1,0 +1,26 @@
+.results-container {
+    margin-top: 3%;
+}
+
+.search-icon {
+    float: right;
+    margin-right: 3%;
+    margin-top: -14%;
+    position: relative;
+    z-index: 2;
+    color: darkslategrey;
+}
+
+.grid-header {
+    background-color: darkgrey;
+}
+
+.grid-row > .col {
+    color: black;
+}
+
+.grid-row:hover {
+    border: darkgrey solid;
+    text-decoration: none;
+    color: darkgrey;
+}

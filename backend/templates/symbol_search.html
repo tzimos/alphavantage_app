@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Symbol search{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='css/symbol_search.css') }}">
+{% endblock %}
+{% block content %}
+
+<div class="input-group top-centered">
+    <h1>Search a symbol</h1>
+    <div class="form-outline">
+        <input type="search" id="search-form" class="form-control"/>
+        <span class="fa fa-search search-icon"></span>
+    </div>
+    <div class="container results-container mw-50" id="result">
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  window.symbol_search_url = "{{url_for('api.symbol_search')}}"
+  window.symbol_search_url_analytical = "{{url_for('api.symbol_search_analytical', symbol='')}}"
+</script>
+<script src="static/js/symbol_search.js"></script>
+{% endblock %}
