@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    flash,
     jsonify,
     redirect,
     render_template,
@@ -8,7 +9,9 @@ from flask import (
     url_for,
 )
 
-from backend.constants import SYMBOL_SEARCH
+from backend.constants import (
+    SYMBOL_SEARCH,
+)
 from backend.external_service import perform_request
 from backend.forms import ApiKeyForm
 from backend.utils import camel_case_to_title_case
@@ -41,12 +44,13 @@ def symbol_search():
         return render_template("symbol_search.html")
     keywords = request.form["query"]
 
-    processed_data = perform_request(
-        apikey=api_key,
-        function=SYMBOL_SEARCH,
-        keywords=keywords
+    return jsonify(
+        perform_request(
+            apikey=api_key,
+            function=SYMBOL_SEARCH,
+            keywords=keywords
+        )
     )
-    return jsonify(processed_data)
 
 
 @blueprint.route(
@@ -78,3 +82,25 @@ def symbol_search_analytical(symbol):
         data=processed_data,
         columns=columns
     )
+
+
+@blueprint.route("/historical_data/<string:symbol>", methods=["GET", "POST", ])
+def historical_data(symbol):
+    api_key = session.get("api_key")
+    if not api_key:
+        return {"redirect": url_for("api.register_api_key")}, 403
+    if request.method == "GET":
+        return render_template("historical_data.html", symbol=symbol)
+    params = {
+        "function": request.form["function"],
+        "symbol": symbol or request.form["symbol"],
+        "interval": request.form.get("interval"),
+    }
+    processed_data = perform_request(
+        apikey=api_key,
+        **params,
+    )
+    if processed_data.get("error"):
+        flash(processed_data.get("error"))
+        return {"redirect": url_for("api.register_api_key")}, 400
+    return jsonify(processed_data)

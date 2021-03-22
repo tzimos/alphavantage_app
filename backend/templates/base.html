@@ -12,7 +12,7 @@
     {% block extra_css %}
     {% endblock %}
 </head>
-<div class="justify-content-center align-items-center" >
+<div class="justify-content-center align-items-center">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Alphavantage</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -42,6 +42,8 @@
                 {% block extra_nav_item %}
                 {% endblock %}
             </ul>
+            {% block right_nav_item %}
+            {% endblock %}
         </div>
     </nav>
     {% block content %}
@@ -58,6 +60,9 @@
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js"
+        integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA=="
         crossorigin="anonymous"></script>
 {% block extra_js %}
 {% endblock %}

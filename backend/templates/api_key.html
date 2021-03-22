@@ -9,11 +9,24 @@
             method="POST"
             action="{{ url_for('api.register_api_key') }}"
             onsubmit="{{ form.submit }}"
-    >    {{ form.csrf_token }}
+    > {{ form.csrf_token }}
 
-        {{ wtf.form_field(form.api_key, class="form-control form-control-lg",placeholder="Enter your api key.")}}
+        {{ wtf.form_field(form.api_key, class="form-control
+        form-control-lg",placeholder="Enter your api key.")}}
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    {% with errors = get_flashed_messages() %}
+    {% if errors %}
+    <div class="alert-message block-message error">
+        <a class="close" href="#">×</a>
+        <ul>
+            {%- for msg in errors %}
+            <li>{{ msg }}</li>
+            {% endfor -%}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
 </div>
 {% endblock %}

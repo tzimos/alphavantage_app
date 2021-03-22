@@ -11,6 +11,13 @@
        href="{{ url_for('api.symbol_search') }}">Search Symbol
         <span class="sr-only">(current)</span></a>
 </li>
+{% if error is not defined %}
+<li class="nav-item">
+    <a class="nav-link"
+       href="{{ url_for('api.historical_data',symbol=data[0]['symbol']) }}">Historical Data
+        <span class="sr-only">(current)</span></a>
+</li>
+{% endif %}
 {% endblock %}
 {% block content %}
 
