@@ -13,14 +13,14 @@
 </li>
 <li class="nav-item">
     <a class="nav-link"
-       href="{{ url_for('api.current_quote', symbol=data[0]['symbol']) }}">
-        Current Quote
+       href="{{ url_for('api.symbol_search_analytical', symbol=symbol) }}">
+        Search Symbol analytics
         <span class="sr-only">(current)</span></a>
 </li>
 {% if error is not defined %}
 <li class="nav-item">
     <a class="nav-link"
-       href="{{ url_for('api.historical_data',symbol=data[0]['symbol']) }}">Historical
+       href="{{ url_for('api.historical_data',symbol=symbol) }}">Historical
         Data
         <span class="sr-only">(current)</span></a>
 </li>
@@ -44,10 +44,8 @@
     </thead>
     <tbody>
     <tr>
-        {% for elem in data %}
-        {% for value in elem.values() %}
+        {% for value in data.values() %}
         <td>{{value}}</td>
-        {% endfor %}
         {% endfor %}
     </tr>
     </tbody>

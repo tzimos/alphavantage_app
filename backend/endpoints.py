@@ -10,6 +10,7 @@ from flask import (
 )
 
 from backend.constants import (
+    GLOBAL_QUOTE,
     SYMBOL_SEARCH,
 )
 from backend.external_service import perform_request
@@ -104,3 +105,25 @@ def historical_data(symbol):
         flash(processed_data.get("error"))
         return {"redirect": url_for("api.register_api_key")}, 400
     return jsonify(processed_data)
+
+
+@blueprint.route("/current-quote/<string:symbol>", methods=["GET", "POST"])
+def current_quote(symbol):
+    api_key = session.get("api_key")
+    if not api_key:
+        return redirect(url_for("api.register_api_key"))
+    processed_data = perform_request(
+        apikey=api_key,
+        function=GLOBAL_QUOTE,
+        symbol=symbol,
+    )
+    if processed_data.get("error"):
+        flash(processed_data.get("error"))
+        return redirect(url_for("api.register_api_key"))
+    columns = camel_case_to_title_case(list(processed_data.keys()))
+    return render_template(
+        "current_quote.html",
+        columns=columns,
+        data=processed_data,
+        symbol=symbol,
+    )

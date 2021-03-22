@@ -16,6 +16,12 @@
         Search Symbol analytics
         <span class="sr-only">(current)</span></a>
 </li>
+<li class="nav-item">
+    <a class="nav-link"
+       href="{{ url_for('api.current_quote', symbol=symbol) }}">
+        Current Quote
+        <span class="sr-only">(current)</span></a>
+</li>
 {% endblock %}
 {% block right_nav_item %}
 <i class="fa fa-refresh refresh-icon" aria-hidden="true"></i>

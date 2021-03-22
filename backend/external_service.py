@@ -10,6 +10,7 @@ from requests import RequestException
 
 from backend.constants import (
     BASE_URL,
+    GLOBAL_QUOTE,
     TIME_SERIES_DAILY,
     TIME_SERIES_INTRADAY,
     SYMBOL_SEARCH,
@@ -98,12 +99,31 @@ def get_historical_data(data: Dict, **kwargs: Dict):
     return meta
 
 
+def get_current_quote_data(data: Dict, **kwargs):
+    """Return the current quote for the given symbol."""
+    content = data["Global Quote"]
+    return {
+        "symbol": content["01. symbol"],
+        "open": content["02. open"],
+        "high": content["03. high"],
+        "low": content["04. low"],
+        "price": content["05. price"],
+        "volume": content["06. volume"],
+        "latestTradingDay": content["07. latest trading day"],
+        "previousClose": content["08. previous close"],
+        "change": content["09. change"],
+        "changePercent": content["10. change percent"],
+
+    }
+
+
 processing_mapping = {
     SYMBOL_SEARCH: get_symbol_search_data,
     TIME_SERIES_INTRADAY: get_historical_data,
     TIME_SERIES_DAILY: get_historical_data,
     TIME_SERIES_WEEKLY: get_historical_data,
     TIME_SERIES_MONTHLY: get_historical_data,
+    GLOBAL_QUOTE: get_current_quote_data
 }
 
 
@@ -125,6 +145,6 @@ def perform_request(
     resp_content = response.json()
     if resp_content.get("error") or resp_content.get("Error Message"):
         return {"error": REQUEST_EXCEPTION}
-    if resp_content.get("note"):
+    if resp_content.get("Note"):
         return {"error": RATE_LIMITING_MESSAGE}
     return processing_mapping.get(function)(response.json(), **params)
