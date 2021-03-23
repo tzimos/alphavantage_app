@@ -67,6 +67,9 @@ $(document).ready(function () {
         success: function (data) {
           createResultElements(resultSelector, data);
         },
+        error: function (data) {
+          window.location.href = data.responseJSON.redirect;
+        },
         options: {"contentType": "application/json"}
       }
     )

@@ -15,7 +15,10 @@ from backend.constants import (
 )
 from backend.external_service import perform_request
 from backend.forms import ApiKeyForm
-from backend.utils import camel_case_to_title_case
+from backend.utils import (
+    camel_case_to_title_case,
+    ensure_api_key,
+)
 
 blueprint = Blueprint("api", __name__)
 
@@ -36,11 +39,9 @@ def register_api_key():
 
 
 @blueprint.route("/symbol_search", methods=["POST", "GET"])
+@ensure_api_key
 def symbol_search():
-    api_key = session.get("api_key")
-    if not api_key:
-        return redirect(url_for("api.register_api_key"))
-
+    api_key = session["api_key"]
     if request.method == "GET":
         return render_template("symbol_search.html")
     keywords = request.form["query"]
@@ -56,11 +57,9 @@ def symbol_search():
 
 @blueprint.route(
     "/symbol-search-analytical/<string:symbol>", methods=["GET"])
+@ensure_api_key
 def symbol_search_analytical(symbol):
-    api_key = session.get("api_key")
-    if not api_key:
-        return redirect(url_for("api.register_api_key"))
-
+    api_key = session["api_key"]
     processed_data = perform_request(
         apikey=api_key,
         function=SYMBOL_SEARCH,
@@ -88,10 +87,9 @@ def symbol_search_analytical(symbol):
 
 @blueprint.route(
     "/historical_data/<string:symbol>", methods=["GET", "POST", ])
+@ensure_api_key
 def historical_data(symbol):
     api_key = session.get("api_key")
-    if not api_key:
-        return {"redirect": url_for("api.register_api_key")}, 403
     if request.method == "GET":
         return render_template("historical_data.html", symbol=symbol)
     params = {
@@ -111,10 +109,9 @@ def historical_data(symbol):
 
 
 @blueprint.route("/current-quote/<string:symbol>", methods=["GET", "POST"])
+@ensure_api_key
 def current_quote(symbol):
     api_key = session.get("api_key")
-    if not api_key:
-        return redirect(url_for("api.register_api_key"))
     processed_data = perform_request(
         apikey=api_key,
         function=GLOBAL_QUOTE,
@@ -135,10 +132,9 @@ def current_quote(symbol):
 
 @blueprint.route(
     "/technical-indicator/<string:symbol>", methods=["GET", "POST"])
+@ensure_api_key
 def technical_indicators(symbol):
     api_key = session.get("api_key")
-    if not api_key:
-        return redirect(url_for("api.register_api_key"))
     if request.method == "GET":
         return render_template("technical_indicators.html", symbol=symbol)
     params = {
