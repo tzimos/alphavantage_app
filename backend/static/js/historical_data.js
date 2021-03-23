@@ -134,7 +134,6 @@ $(document).ready(function () {
           createChart(data);
         },
         error: function (data) {
-          console.log(data)
           window.location.href = data.responseJSON.redirect;
         },
         options: {"contentType": "application/json"}

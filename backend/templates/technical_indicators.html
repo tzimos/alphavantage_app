@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Historical data | {{symbol}}{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" type="text/css"
+      href="{{ url_for('static', filename='css/technical_indicators.css') }}">
+{% endblock %}
+{% block right_nav_item %}
+<i class="fa fa-refresh refresh-icon" aria-hidden="true"></i>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class='row justify-content-center mt-3'>
+        <div class="dropdown show">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+               id="indicatorDropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+                SMA
+            </a>
+            <div class="dropdown-menu"
+                 id="function-options"
+                 aria-labelledby="indicatorDropdownMenuLink">
+            </div>
+        </div>
+        <div class="dropdown show interval-dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+               id="timeDropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+                1min
+            </a>
+            <div id="interval-options"
+                 class="dropdown-menu"
+                 aria-labelledby="timeDropdownMenuLink">
+            </div>
+        </div>
+        <div class="dropdown show interval-dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+               id="timePeriodDropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+                20
+            </a>
+            <div class="dropdown-menu"
+                 id="time-period-options"
+                 aria-labelledby="timePeriodDropdownMenuLink">
+
+            </div>
+        </div>
+        <div class="dropdown show interval-dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+               id="seriesTypeDropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+                close
+            </a>
+            <div class="dropdown-menu"
+                 id="series-type-options"
+                 aria-labelledby="seriesTypeDropdownMenuLink">
+            </div>
+        </div>
+    </div>
+    <div class="col chart-wrapper">
+        <canvas id="technical-indicators-chart"></canvas>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+  window.symbol = "{{symbol}}"
+  window.technical_indicators_url = "{{url_for('api.technical_indicators', symbol=symbol)}}";
+</script>
+<script src="{{ url_for('static', filename='js/technical_indicators.js') }}"></script>
+{% endblock %}

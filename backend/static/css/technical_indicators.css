@@ -1,0 +1,13 @@
+.dropdown-menu {
+    overflow: auto;
+    max-height: 300px;
+    width: auto;
+}
+
+.refresh-icon:hover {
+    transform: scale(1.1);
+}
+
+.dropdown {
+    padding: 2px 2px 2px 2px;
+}

@@ -4,31 +4,11 @@
 <link rel="stylesheet" type="text/css"
       href="{{ url_for('static', filename='css/historical_data.css') }}">
 {% endblock %}
-{% block extra_nav_item %}
-<li class="nav-item">
-    <a class="nav-link"
-       href="{{ url_for('api.symbol_search') }}">Search Symbol
-        <span class="sr-only">(current)</span></a>
-</li>
-<li class="nav-item">
-    <a class="nav-link"
-       href="{{ url_for('api.symbol_search_analytical', symbol=symbol) }}">
-        Search Symbol analytics
-        <span class="sr-only">(current)</span></a>
-</li>
-<li class="nav-item">
-    <a class="nav-link"
-       href="{{ url_for('api.current_quote', symbol=symbol) }}">
-        Current Quote
-        <span class="sr-only">(current)</span></a>
-</li>
-{% endblock %}
 {% block right_nav_item %}
 <i class="fa fa-refresh refresh-icon" aria-hidden="true"></i>
-
 {% endblock %}
 {% block content %}
-<div class="container-fluid">
+<div class="container">
     <div class='row justify-content-center mt-3'>
         <div class="dropdown show">
             <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
@@ -39,7 +19,7 @@
             </a>
             <div class="dropdown-menu"
                  aria-labelledby="intervalDropdownMenuLink">
-                <a class="dropdown-item" onclick="" href="#">Intraday</a>
+                <a class="dropdown-item" href="#">Intraday</a>
                 <a class="dropdown-item" href="#">Daily</a>
                 <a class="dropdown-item" href="#">Weekly</a>
                 <a class="dropdown-item" href="#">Monthly</a>
@@ -53,7 +33,7 @@
                 1min
             </a>
             <div class="dropdown-menu" aria-labelledby="timeDropdownMenuLink">
-                <a class="dropdown-item" onclick="" href="#">1min</a>
+                <a class="dropdown-item" href="#">1min</a>
                 <a class="dropdown-item" href="#">5min</a>
                 <a class="dropdown-item" href="#">15min</a>
                 <a class="dropdown-item" href="#">30min</a>

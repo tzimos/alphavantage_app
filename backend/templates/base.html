@@ -12,7 +12,7 @@
     {% block extra_css %}
     {% endblock %}
 </head>
-<div class="justify-content-center align-items-center">
+<div class="justify-content-center align-items-center h-100">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Alphavantage</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -39,8 +39,39 @@
                         <span class="sr-only">(current)</span></a>
                 </li>
                 {% endif %}
-                {% block extra_nav_item %}
-                {% endblock %}
+                {% if symbol %}
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ url_for('api.symbol_search') }}">Search Symbol
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ url_for('api.symbol_search_analytical', symbol=symbol) }}">
+                        Search Symbol analytics
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ url_for('api.current_quote', symbol=symbol) }}">
+                        Current Quote
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                {% if error is not defined %}
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ url_for('api.historical_data',symbol=symbol) }}">Historical
+                        Data
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{{ url_for('api.technical_indicators',symbol=symbol) }}">Technical
+                        indicators
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                {% endif %}
             </ul>
             {% block right_nav_item %}
             {% endblock %}

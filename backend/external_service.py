@@ -11,6 +11,7 @@ from requests import RequestException
 from backend.constants import (
     BASE_URL,
     GLOBAL_QUOTE,
+    SUPPORTED_INDICATORS,
     TIME_SERIES_DAILY,
     TIME_SERIES_INTRADAY,
     SYMBOL_SEARCH,
@@ -64,14 +65,14 @@ def get_symbol_search_data(data: Dict, **kwargs: Dict) -> List[Dict[str, str]]:
     return ret_data
 
 
-def get_historical_data(data: Dict, **kwargs: Dict):
+def get_historical_data(payload: Dict, **kwargs: Dict):
     """Return historical data for a given period and symbol."""
-    metadata = data["Meta Data"]
+    metadata = payload["Meta Data"]
     function = kwargs.get("function")
     time_series_key = TIME_SERIES_MAPPING.get(function)
     if function == TIME_SERIES_INTRADAY:
         time_series_key = time_series_key.format(interval=kwargs["interval"])
-    time_series = data[time_series_key]
+    time_series = payload[time_series_key]
     data = {
         "labels": [],
         "open": [],
@@ -86,7 +87,7 @@ def get_historical_data(data: Dict, **kwargs: Dict):
         data["high"].append(price["2. high"])
         data["low"].append(price["3. low"])
         data["close"].append(price["4. close"])
-    meta = {
+    return_data = {
         "meta": {
             "information": metadata["1. Information"],
             "symbol": metadata["2. Symbol"],
@@ -95,8 +96,8 @@ def get_historical_data(data: Dict, **kwargs: Dict):
         **data,
     }
     if function == TIME_SERIES_INTRADAY:
-        meta["meta"]["interval"] = metadata["4. Interval"]
-    return meta
+        return_data["meta"]["interval"] = metadata["4. Interval"]
+    return return_data
 
 
 def get_current_quote_data(data: Dict, **kwargs):
@@ -117,13 +118,41 @@ def get_current_quote_data(data: Dict, **kwargs):
     }
 
 
+def get_technical_indicators_data(payload: Dict, **kwargs) -> Dict:
+    metadata = payload["Meta Data"]
+    function = kwargs.get("function")
+    time_series_key = f"Technical Analysis: {function}"
+    time_series = payload[time_series_key]
+
+    data = {
+        "labels": list(time_series.keys()),
+        "data": [
+            {"name": name, "price": price}
+            for val in time_series.values()
+            for name, price in val.items()
+        ],
+        "data_keys": list(list(time_series.values())[0].keys())
+    }
+    return {
+        "meta": {
+            "symbol": metadata["1: Symbol"],
+            "information": metadata["2: Indicator"]
+        },
+        **data,
+    }
+
+
 processing_mapping = {
     SYMBOL_SEARCH: get_symbol_search_data,
     TIME_SERIES_INTRADAY: get_historical_data,
     TIME_SERIES_DAILY: get_historical_data,
     TIME_SERIES_WEEKLY: get_historical_data,
     TIME_SERIES_MONTHLY: get_historical_data,
-    GLOBAL_QUOTE: get_current_quote_data
+    GLOBAL_QUOTE: get_current_quote_data,
+    **{
+        indicator: get_technical_indicators_data
+        for indicator in SUPPORTED_INDICATORS
+    }
 }
 
 

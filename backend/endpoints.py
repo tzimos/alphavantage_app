@@ -55,7 +55,7 @@ def symbol_search():
 
 
 @blueprint.route(
-    "/symbol_search_analytical/<string:symbol>", methods=["GET"])
+    "/symbol-search-analytical/<string:symbol>", methods=["GET"])
 def symbol_search_analytical(symbol):
     api_key = session.get("api_key")
     if not api_key:
@@ -81,11 +81,13 @@ def symbol_search_analytical(symbol):
     return render_template(
         "symbol_search_analytical.html",
         data=processed_data,
-        columns=columns
+        columns=columns,
+        symbol=processed_data[0]["symbol"]
     )
 
 
-@blueprint.route("/historical_data/<string:symbol>", methods=["GET", "POST", ])
+@blueprint.route(
+    "/historical_data/<string:symbol>", methods=["GET", "POST", ])
 def historical_data(symbol):
     api_key = session.get("api_key")
     if not api_key:
@@ -103,6 +105,7 @@ def historical_data(symbol):
     )
     if processed_data.get("error"):
         flash(processed_data.get("error"))
+        del session["api_key"]
         return {"redirect": url_for("api.register_api_key")}, 400
     return jsonify(processed_data)
 
@@ -119,6 +122,7 @@ def current_quote(symbol):
     )
     if processed_data.get("error"):
         flash(processed_data.get("error"))
+        del session["api_key"]
         return redirect(url_for("api.register_api_key"))
     columns = camel_case_to_title_case(list(processed_data.keys()))
     return render_template(
@@ -127,3 +131,29 @@ def current_quote(symbol):
         data=processed_data,
         symbol=symbol,
     )
+
+
+@blueprint.route(
+    "/technical-indicator/<string:symbol>", methods=["GET", "POST"])
+def technical_indicators(symbol):
+    api_key = session.get("api_key")
+    if not api_key:
+        return redirect(url_for("api.register_api_key"))
+    if request.method == "GET":
+        return render_template("technical_indicators.html", symbol=symbol)
+    params = {
+        "interval": request.form["interval"],
+        "function": request.form["function"],
+        "symbol": symbol or request.form["symbol"],
+        "time_period": request.form["time_period"],
+        "series_type": request.form["series_type"],
+    }
+    processed_data = perform_request(
+        apikey=api_key,
+        **params,
+    )
+    if processed_data.get("error"):
+        flash(processed_data.get("error"))
+        del session["api_key"]
+        return {"redirect": url_for("api.register_api_key")}, 400
+    return jsonify(processed_data)

@@ -5,29 +5,7 @@
 <link rel="stylesheet" type="text/css"
       href="{{ url_for('static', filename='css/symbol_search_analytical.css') }}">
 {% endblock %}
-{% block extra_nav_item %}
-<li class="nav-item">
-    <a class="nav-link"
-       href="{{ url_for('api.symbol_search') }}">Search Symbol
-        <span class="sr-only">(current)</span></a>
-</li>
-<li class="nav-item">
-    <a class="nav-link"
-       href="{{ url_for('api.current_quote', symbol=data[0]['symbol']) }}">
-        Current Quote
-        <span class="sr-only">(current)</span></a>
-</li>
-{% if error is not defined %}
-<li class="nav-item">
-    <a class="nav-link"
-       href="{{ url_for('api.historical_data',symbol=data[0]['symbol']) }}">Historical
-        Data
-        <span class="sr-only">(current)</span></a>
-</li>
-{% endif %}
-{% endblock %}
 {% block content %}
-
 {% if error is defined %}
 <div class="error-message">
     {{error.message|safe}}
@@ -53,7 +31,4 @@
     </tbody>
 </table>
 {% endif %}
-{% endblock %}
-{% block extra_js %}
-<script src="static/js/symbol_search_analytical.js"></script>
 {% endblock %}

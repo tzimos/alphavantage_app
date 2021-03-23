@@ -70,5 +70,5 @@ $(document).ready(function () {
         options: {"contentType": "application/json"}
       }
     )
-  }, 1000));
+  }, 300));
 });
